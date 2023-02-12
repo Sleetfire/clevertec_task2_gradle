@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'java-library'
+    id 'maven-publish'
+    id 'jacoco'
+}
+
+group = 'ru.clevertec'
+version = '1.3.5'
+
+java {
+    sourceCompatibility = '8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    implementation 'org.apache.commons:commons-lang3:3.10'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes('Jar-Name': project.name,
+                   'Jar-Version': project.version)
+    }
+}
+
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'myRepo'
+            url = layout.buildDirectory.dir("repo")
+        }
+    }
+}
+
+build {
+    dependsOn {
+        tasks.named("publishToMavenLocal")
+    }
+}
+
+apply from: 'test_plugin.gradle'
