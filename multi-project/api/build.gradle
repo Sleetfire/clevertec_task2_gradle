@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'ru.clevertec'
+version = '0.0.1'
+mainClassName = "ru.clevertec.api.App"
+
+java {
+    sourceCompatibility = '8'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    implementation project(':core')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+apply from: 'custom_fat_jar.gradle'
+
+tasks.named('jar') {
+    manifest {
+        attributes('Jar-Name': project.name,
+                   'Jar-Version': project.version,
+                   'Main-class': 'ru.clevertec.api.App')
+    }
+}
+
+

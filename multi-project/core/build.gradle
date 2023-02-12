@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+plugins.apply TestCopyPlugin
+
+group = 'ru.clevertec'
+version = '0.0.1'
+
+java {
+    sourceCompatibility = '8'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    implementation 'ru.clevertec:utils:1.3.5'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes('Jar-Name': project.name,
+                   'Jar-Version': project.version)
+    }
+}
+
+test {
+    finalizedBy 'copy-test'
+}
+
+
